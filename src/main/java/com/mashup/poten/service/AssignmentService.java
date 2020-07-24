@@ -1,0 +1,9 @@
+package com.mashup.poten.service;
+
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+
+@RequiredArgsConstructor
+@Service
+public class AssignmentService {
+}
