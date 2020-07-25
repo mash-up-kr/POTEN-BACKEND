@@ -9,7 +9,9 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 /**
  * habit Domain 객체
@@ -47,8 +49,11 @@ public class Habit implements Comparable<Habit> {
     @ManyToOne
     private User user;
 
+    @OneToMany(mappedBy = "habit")
+    private List<Diary> diarys = new ArrayList<>();
+
     @Builder
-    public Habit(Integer habitSeq, String title, int duration, String doDay, int totalCount, int doneCount, int life, State state, int alarmTime, LocalDateTime createDate) {
+    public Habit(Integer habitSeq, String title, int duration, String doDay, int totalCount, int doneCount, int life, State state, int alarmTime, LocalDateTime createDate, List<Diary> diarys) {
         this.habitSeq = habitSeq;
         this.title = title;
         this.duration = duration;
@@ -59,6 +64,7 @@ public class Habit implements Comparable<Habit> {
         this.state = state;
         this.alarmTime = alarmTime;
         this.createDate =createDate;
+        this.diarys = diarys;
     }
 
 

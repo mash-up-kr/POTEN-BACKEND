@@ -24,7 +24,7 @@ public class HabitService {
     private final UserRepository userRepository;
 
 
-    public HabitDTO addhabit(HttpServletRequest request, HabitDTO habitDTO) throws Exception{
+    public HabitDTO addHabit(HttpServletRequest request, HabitDTO habitDTO) throws Exception{
         String token = request.getHeader(JwtProvider.HEADER_NAME);
         habitDTO.removeDoDaySpace();
         User user = userRepository.findById(Integer.valueOf(jwtProvider.getUserSeq(token))).orElseThrow(() ->  new Exception(ResponseMessage.INVALID_TOKEN));
@@ -32,10 +32,11 @@ public class HabitService {
         habit.setOwner(user);
         habit.setTotalCount();
         habit.setLife();
-        return HabitDTO.fromDomain(habitRepository.save(habit));
+        habit = habitRepository.save(habit);
+        return HabitDTO.fromDomain(habit);
     }
 
-    private Habit getHabitWitchCheckhabitOwner(String userSeq, Integer habitSeq) throws Exception{
+    private Habit getHabitWitchCheckHabitOwner(String userSeq, Integer habitSeq) throws Exception{
         User user = userRepository.findById(Integer.valueOf(userSeq)).orElseThrow(() ->  new Exception(ResponseMessage.INVALID_TOKEN));
         Habit habit = habitRepository.findById(habitSeq).orElseThrow(() ->  new Exception(ResponseMessage.INVALID_TOKEN));
         if(user.getUserSeq().intValue() != habit.getUser().getUserSeq().intValue()) {
@@ -61,6 +62,6 @@ public class HabitService {
 
     public HabitDTO getHabit(HttpServletRequest request, Integer habitSeq) throws Exception{
         String token = request.getHeader(JwtProvider.HEADER_NAME);
-        return HabitDTO.fromDomain(getHabitWitchCheckhabitOwner(jwtProvider.getUserSeq(token), habitSeq));
+        return HabitDTO.fromDomain(getHabitWitchCheckHabitOwner(jwtProvider.getUserSeq(token), habitSeq));
     }
 }

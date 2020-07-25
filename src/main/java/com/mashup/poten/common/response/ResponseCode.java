@@ -12,4 +12,5 @@ public class ResponseCode {
 
     // 회원이 아님
     public static final int NEED_TO_SIGN_UP = 3;
+    public static final int DUPLICATE_NICKNAME = 4;
 }

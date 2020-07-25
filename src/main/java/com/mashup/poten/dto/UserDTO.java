@@ -5,6 +5,7 @@ import com.mashup.poten.domain.User;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -21,7 +22,7 @@ public class UserDTO {
     private String nickname;
 
     @JsonProperty("habits")
-    private List<HabitDTO> habitDTOs;
+    private List<HabitDTO> habitDTOs = new ArrayList<>();
 
     public User toDomain() {
         return User.builder().snsType(snsType).token(token).nickname(nickname).build();
@@ -35,7 +36,7 @@ public class UserDTO {
         this.token = newToken;
     }
 
-    public void setSortedForTodayhabit(List<HabitDTO> habitDTOs) {
+    public void setSortedForTodayHabit(List<HabitDTO> habitDTOs) {
         this.habitDTOs = habitDTOs;
     }
 }

@@ -40,6 +40,9 @@ public class UserController {
         try{
             return Response.builder().responseCode(ResponseCode.SUCCESS).responseData(userService.signUp(userDTO)).build();
         }catch (Exception e) {
+            if(e.getMessage().equals(ResponseMessage.DUPLICATE_NICKNAME)) {
+                return Response.builder().responseCode(ResponseCode.DUPLICATE_NICKNAME).responseData(e.getMessage()).build();
+            }
             return Response.builder().responseCode(ResponseCode.FAIL).responseData(e.toString()).build();
         }
     }

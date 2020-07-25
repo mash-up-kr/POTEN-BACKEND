@@ -1,11 +1,15 @@
 package com.mashup.poten.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.mashup.poten.common.state.State;
 import com.mashup.poten.domain.Habit;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @AllArgsConstructor
 @Getter
@@ -31,8 +35,14 @@ public class HabitDTO {
 
     private LocalDateTime createDate;
 
+    @JsonProperty("diarys")
+    private List<DiaryDTO> diaryDTOList = new ArrayList<>();
+
     public static HabitDTO fromDomain(Habit habit) {
-        return new HabitDTO(habit.getHabitSeq(), habit.getTitle(), habit.getDuration(), habit.getDoDay(), habit.getTotalCount(), habit.getDoneCount(), habit.getLife(), habit.getState(), habit.getAlarmTime(), habit.getCreateDate());
+        if(habit.getDiarys() == null) {
+            return new HabitDTO(habit.getHabitSeq(), habit.getTitle(), habit.getDuration(), habit.getDoDay(), habit.getTotalCount(), habit.getDoneCount(), habit.getLife(), habit.getState(), habit.getAlarmTime(), habit.getCreateDate(), null);
+        }
+        return new HabitDTO(habit.getHabitSeq(), habit.getTitle(), habit.getDuration(), habit.getDoDay(), habit.getTotalCount(), habit.getDoneCount(), habit.getLife(), habit.getState(), habit.getAlarmTime(), habit.getCreateDate(), habit.getDiarys().stream().map(DiaryDTO::fromDomain).collect(Collectors.toList()));
     }
 
     public Habit toDomain() {

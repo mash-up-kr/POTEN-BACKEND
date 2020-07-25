@@ -17,9 +17,9 @@ public class HabitController {
     private final HabitService habitService;
 
     @PostMapping("")
-    public Response addhabit(HttpServletRequest request, @RequestBody HabitDTO habitDTO) {
+    public Response addHabit(HttpServletRequest request, @RequestBody HabitDTO habitDTO) {
         try {
-            return Response.builder().responseCode(ResponseCode.SUCCESS).responseData(habitService.addhabit(request, habitDTO)).build();
+            return Response.builder().responseCode(ResponseCode.SUCCESS).responseData(habitService.addHabit(request, habitDTO)).build();
         } catch (Exception e) {
             return Response.builder().responseCode(ResponseCode.SUCCESS).responseData(e.getMessage()).build();
         }

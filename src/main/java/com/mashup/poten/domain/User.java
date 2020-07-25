@@ -1,5 +1,6 @@
 package com.mashup.poten.domain;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.mashup.poten.dto.HabitDTO;
 import com.mashup.poten.dto.UserDTO;
 import lombok.AccessLevel;
@@ -28,8 +29,10 @@ public class User {
 
     private String snsType;
 
+    @Column(length = 400)
     private String token;
 
+    @Column(unique = true)
     private String nickname;
 
     @OneToMany(mappedBy = "user")
@@ -55,6 +58,6 @@ public class User {
 
         todayhabits.addAll(notTodayhabits);
 
-        userDTO.setSortedForTodayhabit(todayhabits.stream().map(HabitDTO::fromDomain).collect(Collectors.toList()));
+        userDTO.setSortedForTodayHabit(todayhabits.stream().map(HabitDTO::fromDomain).collect(Collectors.toList()));
     }
 }

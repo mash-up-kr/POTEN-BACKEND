@@ -6,4 +6,5 @@ public class ResponseMessage {
     public static final String EMPTY_USER_ID_OR_PASSWORD = "아이디 혹은 비밀번호를 입력해주세요.";
 
     public static final String NEED_TO_SIGN_UP = "회원가입이 필요헙니다.";
+    public static final String DUPLICATE_NICKNAME = "이미 사용중인 닉네임입니다.";
 }

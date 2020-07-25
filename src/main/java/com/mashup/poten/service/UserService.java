@@ -22,6 +22,10 @@ public class UserService implements UserDetailsService {
         if("".equals(userDTO.getSnsType()) || "".equals(userDTO.getToken())) {
             throw new Exception(ResponseMessage.INVALID_TOKEN);
         }
+
+        if(userRepository.findByNickname(userDTO.getNickname()) != null) {
+            throw new Exception(ResponseMessage.DUPLICATE_NICKNAME);
+        }
         User user = userRepository.save(userDTO.toDomain());
         return UserDTO.fromDomain(user);
     }
