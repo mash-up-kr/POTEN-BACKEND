@@ -21,7 +21,7 @@ public class HabitController {
         try {
             return Response.builder().responseCode(ResponseCode.SUCCESS).responseData(habitService.addHabit(request, habitDTO)).build();
         } catch (Exception e) {
-            return Response.builder().responseCode(ResponseCode.SUCCESS).responseData(e.getMessage()).build();
+            return Response.builder().responseCode(ResponseCode.FAIL).responseData(e.getMessage()).build();
         }
     }
 
@@ -30,7 +30,7 @@ public class HabitController {
         try {
             return Response.builder().responseCode(ResponseCode.SUCCESS).responseData(habitService.getHabits(request)).build();
         } catch (Exception e) {
-            return Response.builder().responseCode(ResponseCode.SUCCESS).responseData(e.getMessage()).build();
+            return Response.builder().responseCode(ResponseCode.FAIL).responseData(e.getMessage()).build();
         }
     }
 
@@ -39,7 +39,7 @@ public class HabitController {
         try {
             return Response.builder().responseCode(ResponseCode.SUCCESS).responseData(habitService.getHabit(request, habitSeq)).build();
         } catch (Exception e) {
-            return Response.builder().responseCode(ResponseCode.SUCCESS).responseData(e.getMessage()).build();
+            return Response.builder().responseCode(ResponseCode.FAIL).responseData(e.getMessage()).build();
         }
     }
 }
