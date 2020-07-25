@@ -1,7 +1,9 @@
 package com.mashup.poten.domain;
 
+import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -14,6 +16,7 @@ import javax.persistence.Id;
  */
 
 @Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 public class User {
 
@@ -21,14 +24,18 @@ public class User {
     @Id
     private Integer userSeq;
 
-    private String userId;
+    private String snsType;
 
-    private String userPassword;
+    private String token;
 
     @Builder
-    public User(Integer userSeq, String userId, String userPassword) {
+    public User(Integer userSeq, String snsType, String token) {
         this.userSeq = userSeq;
-        this.userId = userId;
-        this.userPassword = userPassword;
+        this.snsType = snsType;
+        this.token = token;
+    }
+
+    public void encodingPassword(String token) {
+        this.token = token;
     }
 }

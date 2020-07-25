@@ -18,23 +18,24 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     public void configure(WebSecurity web) throws Exception {
-        web.ignoring().mvcMatchers("/user/login", "/user/sign-up" ,"/h2-console/**");
+        web.ignoring().mvcMatchers("/user/sign-in", "/user/sign-up", "/h2-console/**", "/error");
     }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
 
-        // 요청이 들어온 URL들은 기본적으로 인증이 되어야한다.(인증 == 로그)
-        http.authorizeRequests().anyRequest().authenticated();
         // Http Basic 을 비활성화 하겠다.
         http.httpBasic().disable();
         // csrf 비활성화
         http.csrf().disable();
+
+        http.formLogin().disable();
+
+        // 요청이 들어온 URL들은 기본적으로 인증이 되어야한다.(인증 == 로그인)
+        http.authorizeRequests().anyRequest().authenticated();
         // 이 서비스는 세션이 없다.
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         // 로그인 말고 JWT 로 사용자 인증하기
         http.addFilterBefore(new JwtAuthenticationFilter(jwtProvider), UsernamePasswordAuthenticationFilter.class);
-
-
     }
 }

@@ -9,4 +9,7 @@ public class ResponseCode {
 
     // INVALID_JSON
     public static final int FAIL_DUE_TO_INVALID_JSON = 2;
+
+    // 회원이 아님
+    public static final int NEED_TO_SIGN_UP = 3;
 }

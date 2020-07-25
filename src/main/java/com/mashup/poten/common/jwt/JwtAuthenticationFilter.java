@@ -39,7 +39,7 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
      */
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
-
+        System.out.println(((HttpServletRequest)request).getRequestURL());
         String token = jwtProvider.getTokenFromHeader(((HttpServletRequest) request));
         if (token != null && jwtProvider.validateTokenIssuedDate(token)) {
             Authentication authentication = jwtProvider.getAuthentication(token);

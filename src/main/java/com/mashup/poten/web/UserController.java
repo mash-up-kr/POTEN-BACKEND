@@ -1,35 +1,42 @@
 package com.mashup.poten.web;
 
+import com.mashup.poten.common.jwt.JwtProvider;
 import com.mashup.poten.common.response.Response;
 import com.mashup.poten.common.response.ResponseCode;
+import com.mashup.poten.common.response.ResponseMessage;
 import com.mashup.poten.dto.UserDTO;
 import com.mashup.poten.service.UserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 
-@RequestMapping("/user")
 @RequiredArgsConstructor
+@RequestMapping("/user")
 @RestController
 public class UserController {
 
     private final UserService userService;
 
-    @PostMapping("/login")
-    public Response login(@RequestParam UserDTO userDTO) {
+    @PostMapping("/sign-in")
+    public Response login(HttpServletRequest request, @RequestBody UserDTO userDTO) {
         try{
-            return Response.builder().responseCode(ResponseCode.SUCCESS).responseData("success").build();
+            String token = request.getHeader(JwtProvider.HEADER_NAME);
+            if(token != null) {
+                return Response.builder().responseCode(ResponseCode.SUCCESS).responseData(userService.loginByToken(token)).build();
+            }else {
+                return Response.builder().responseCode(ResponseCode.SUCCESS).responseData(userService.loginByOauth(userDTO)).build();
+            }
         }catch (Exception e) {
-            return Response.builder().responseCode(ResponseCode.FAIL).responseData(e.toString()).build();
+            if(e.getMessage().equals(ResponseMessage.NEED_TO_SIGN_UP)) {
+                return Response.builder().responseCode(ResponseCode.NEED_TO_SIGN_UP).responseData(e.getMessage()).build();
+            }
+            return Response.builder().responseCode(ResponseCode.FAIL).responseData(e.getMessage()).build();
         }
     }
 
     @PostMapping("/sign-up")
-    public Response signUp(@RequestParam UserDTO userDTO) {
+    public Response signUp(@RequestBody UserDTO userDTO) {
         try{
             return Response.builder().responseCode(ResponseCode.SUCCESS).responseData(userService.signUp(userDTO)).build();
         }catch (Exception e) {

@@ -24,7 +24,7 @@ public class JwtProvider {
      * 2. JWT 토큰 Validation Check
      * 3. Authentication 객체 생성
      */
-    private String secretKey = "p!o@t#e$n%z#z@a*n(g!";
+    private String secretKey = "p!o@t#e$n%z#z@a*n@g!";
 
     private long tokenValidTime = 30 * 24 * 60 * 60 * 1000L;
 
