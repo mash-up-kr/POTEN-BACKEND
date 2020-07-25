@@ -38,7 +38,9 @@ public class UserService implements UserDetailsService {
     public UserDTO loginByToken(String token) throws Exception {
         if(jwtProvider.validateTokenIssuedDate(token)) {
             User user = userRepository.getOne(Integer.valueOf(jwtProvider.getUserSeq(token)));
-            return UserDTO.fromDomain(user);
+            UserDTO userDTO = UserDTO.fromDomain(user);
+            user.setSortedForToday(userDTO);
+            return userDTO;
         }else {
             throw new Exception(ResponseMessage.INVALID_TOKEN);
         }
@@ -50,7 +52,9 @@ public class UserService implements UserDetailsService {
             throw new Exception(ResponseMessage.NEED_TO_SIGN_UP);
         }
         String newToken = jwtProvider.createToken(String.valueOf(user.getUserSeq()));
+        userDTO = UserDTO.fromDomain(user);
         userDTO.setToken(newToken);
+        user.setSortedForToday(userDTO);
         return userDTO;
     }
 }
