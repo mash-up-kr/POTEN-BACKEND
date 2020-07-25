@@ -1,5 +1,6 @@
 package com.mashup.poten.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.mashup.poten.domain.User;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -19,21 +20,22 @@ public class UserDTO {
 
     private String nickname;
 
-    private List<AssignmentDTO> assignmentDTOs;
+    @JsonProperty("habits")
+    private List<HabitDTO> habitDTOs;
 
     public User toDomain() {
         return User.builder().snsType(snsType).token(token).nickname(nickname).build();
     }
 
     public static UserDTO fromDomain(User user) {
-        return new UserDTO(user.getUserSeq(), user.getSnsType(), user.getToken(), user.getNickname(), user.getAssignments().stream().map(AssignmentDTO::fromDomain).collect(Collectors.toList()));
+        return new UserDTO(user.getUserSeq(), user.getSnsType(), user.getToken(), user.getNickname(), user.getHabits().stream().map(HabitDTO::fromDomain).collect(Collectors.toList()));
     }
 
     public void setToken(String newToken) {
         this.token = newToken;
     }
 
-    public void setSortedForTodayAssignment(List<AssignmentDTO> assignmentDTOs) {
-        this.assignmentDTOs = assignmentDTOs;
+    public void setSortedForTodayhabit(List<HabitDTO> habitDTOs) {
+        this.habitDTOs = habitDTOs;
     }
 }

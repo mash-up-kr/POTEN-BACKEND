@@ -9,17 +9,17 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 
 /**
- * Assignment Domain 객체
+ * habit Domain 객체
  * 과제에 대한 비즈니스 로직을 담당
  */
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @Entity
-public class Assignment implements Comparable<Assignment> {
+public class Habit implements Comparable<Habit> {
 
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
-    private Integer assignmentSeq;
+    private Integer habitSeq;
 
     private String title;
 
@@ -42,8 +42,8 @@ public class Assignment implements Comparable<Assignment> {
     private User user;
 
     @Builder
-    public Assignment(Integer assignmentSeq, String title, int duration, String doDay, int totalCount, int doneCount, String state, int alarmTime, LocalDateTime createDate) {
-        this.assignmentSeq = assignmentSeq;
+    public Habit(Integer habitSeq, String title, int duration, String doDay, int totalCount, int doneCount, String state, int alarmTime, LocalDateTime createDate) {
+        this.habitSeq = habitSeq;
         this.title = title;
         this.duration = duration;
         this.doDay = doDay;
@@ -56,10 +56,10 @@ public class Assignment implements Comparable<Assignment> {
 
 
     @Override
-    public int compareTo(Assignment assignment) {
+    public int compareTo(Habit habit) {
         int remainDayCount = this.totalCount - this.doneCount;
-        int nextAssignmentRemainDayCount = assignment.getTotalCount() - assignment.getDoneCount();
-        return (nextAssignmentRemainDayCount - remainDayCount);
+        int nexthabitRemainDayCount = habit.getTotalCount() - habit.getDoneCount();
+        return (nexthabitRemainDayCount - remainDayCount);
     }
 
     @PrePersist

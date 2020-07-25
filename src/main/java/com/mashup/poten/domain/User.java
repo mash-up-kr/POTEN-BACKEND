@@ -1,6 +1,6 @@
 package com.mashup.poten.domain;
 
-import com.mashup.poten.dto.AssignmentDTO;
+import com.mashup.poten.dto.HabitDTO;
 import com.mashup.poten.dto.UserDTO;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -33,7 +33,7 @@ public class User {
     private String nickname;
 
     @OneToMany(mappedBy = "user")
-    private List<Assignment> assignments = new ArrayList<>();
+    private List<Habit> habits = new ArrayList<>();
 
     @Builder
     public User(Integer userSeq, String snsType, String token, String nickname) {
@@ -50,11 +50,11 @@ public class User {
     public void setSortedForToday(UserDTO userDTO) {
         LocalDate date = LocalDate.now();
 
-        List<Assignment> todayAssignments = assignments.stream().filter(assignment -> assignment.getDoDay().contains(date.getDayOfWeek().toString())).sorted().collect(Collectors.toList());
-        List<Assignment> notTodayAssignments = assignments.stream().filter(assignment -> !assignment.getDoDay().contains(date.getDayOfWeek().toString())).sorted().collect(Collectors.toList());
+        List<Habit> todayhabits = habits.stream().filter(habit -> habit.getDoDay().contains(date.getDayOfWeek().toString())).sorted().collect(Collectors.toList());
+        List<Habit> notTodayhabits = habits.stream().filter(habit -> !habit.getDoDay().contains(date.getDayOfWeek().toString())).sorted().collect(Collectors.toList());
 
-        todayAssignments.addAll(notTodayAssignments);
+        todayhabits.addAll(notTodayhabits);
 
-        userDTO.setSortedForTodayAssignment(todayAssignments.stream().map(AssignmentDTO::fromDomain).collect(Collectors.toList()));
+        userDTO.setSortedForTodayhabit(todayhabits.stream().map(HabitDTO::fromDomain).collect(Collectors.toList()));
     }
 }
