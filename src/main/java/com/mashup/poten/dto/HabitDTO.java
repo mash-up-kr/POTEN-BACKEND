@@ -23,6 +23,8 @@ public class HabitDTO {
 
     private int doneCount;
 
+    private int life;
+
     private State state;
 
     private int alarmTime;
@@ -30,7 +32,7 @@ public class HabitDTO {
     private LocalDateTime createDate;
 
     public static HabitDTO fromDomain(Habit habit) {
-        return new HabitDTO(habit.getHabitSeq(), habit.getTitle(), habit.getDuration(), habit.getDoDay(), habit.getTotalCount(), habit.getDoneCount(), habit.getState(), habit.getAlarmTime(), habit.getCreateDate());
+        return new HabitDTO(habit.getHabitSeq(), habit.getTitle(), habit.getDuration(), habit.getDoDay(), habit.getTotalCount(), habit.getDoneCount(), habit.getLife(), habit.getState(), habit.getAlarmTime(), habit.getCreateDate());
     }
 
     public Habit toDomain() {

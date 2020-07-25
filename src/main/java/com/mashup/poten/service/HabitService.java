@@ -31,6 +31,7 @@ public class HabitService {
         Habit habit = habitDTO.toDomain();
         habit.setOwner(user);
         habit.setTotalCount();
+        habit.setLife();
         return HabitDTO.fromDomain(habitRepository.save(habit));
     }
 
