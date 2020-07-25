@@ -1,5 +1,6 @@
 package com.mashup.poten.dto;
 
+import com.mashup.poten.common.state.State;
 import com.mashup.poten.domain.Habit;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -22,7 +23,7 @@ public class HabitDTO {
 
     private int doneCount;
 
-    private String state;
+    private State state;
 
     private int alarmTime;
 
@@ -34,6 +35,10 @@ public class HabitDTO {
 
     public Habit toDomain() {
         return Habit.builder().title(title).duration(duration).doDay(doDay).totalCount(totalCount).doneCount(doneCount).state(state).alarmTime(alarmTime).createDate(createDate).build();
+    }
+
+    public void removeDoDaySpace() {
+        this.doDay = this.doDay.replaceAll(" ", "");
     }
 
 }

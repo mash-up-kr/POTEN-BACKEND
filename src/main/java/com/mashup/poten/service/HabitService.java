@@ -26,9 +26,11 @@ public class HabitService {
 
     public HabitDTO addhabit(HttpServletRequest request, HabitDTO habitDTO) throws Exception{
         String token = request.getHeader(JwtProvider.HEADER_NAME);
+        habitDTO.removeDoDaySpace();
         User user = userRepository.findById(Integer.valueOf(jwtProvider.getUserSeq(token))).orElseThrow(() ->  new Exception(ResponseMessage.INVALID_TOKEN));
         Habit habit = habitDTO.toDomain();
         habit.setOwner(user);
+        habit.setTotalCount();
         return HabitDTO.fromDomain(habitRepository.save(habit));
     }
 

@@ -1,12 +1,15 @@
 package com.mashup.poten.domain;
 
+import com.mashup.poten.common.state.State;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Arrays;
 
 /**
  * habit Domain 객체
@@ -31,7 +34,8 @@ public class Habit implements Comparable<Habit> {
 
     private int doneCount;
 
-    private String state;
+    @Enumerated(EnumType.STRING)
+    private State state;
 
     private int alarmTime;
 
@@ -42,7 +46,7 @@ public class Habit implements Comparable<Habit> {
     private User user;
 
     @Builder
-    public Habit(Integer habitSeq, String title, int duration, String doDay, int totalCount, int doneCount, String state, int alarmTime, LocalDateTime createDate) {
+    public Habit(Integer habitSeq, String title, int duration, String doDay, int totalCount, int doneCount, State state, int alarmTime, LocalDateTime createDate) {
         this.habitSeq = habitSeq;
         this.title = title;
         this.duration = duration;
@@ -59,7 +63,7 @@ public class Habit implements Comparable<Habit> {
     public int compareTo(Habit habit) {
         int remainDayCount = this.totalCount - this.doneCount;
         int nexthabitRemainDayCount = habit.getTotalCount() - habit.getDoneCount();
-        return (nexthabitRemainDayCount - remainDayCount);
+        return (remainDayCount - nexthabitRemainDayCount);
     }
 
     @PrePersist
@@ -69,6 +73,46 @@ public class Habit implements Comparable<Habit> {
 
     public void setOwner(User user) {
         this.user = user;
+    }
+
+    public void setTotalCount() {
+        int cnt = 0;
+        String[] dows = this.doDay.split(";");
+        LocalDate currDate = LocalDate.now();
+        String day = currDate.getDayOfWeek().toString();
+
+        for(int i = 0; i < this.duration; i++) {
+            switch(day) {
+                case "MONDAY":
+                    if(Arrays.stream(dows).anyMatch(day::equals)) cnt++;
+                    break;
+                case "TUESDAY":
+                    if(Arrays.stream(dows).anyMatch(day::equals)) cnt++;
+                    break;
+                case "WEDNESDAY":
+                    if(Arrays.stream(dows).anyMatch(day::equals)) cnt++;
+                    break;
+                case "THURSDAY":
+                    if(Arrays.stream(dows).anyMatch(day::equals)) cnt++;
+                    break;
+                case "FRIDAY":
+                    if(Arrays.stream(dows).anyMatch(day::equals)) cnt++;
+                    break;
+                case "SATURDAY":
+                    if(Arrays.stream(dows).anyMatch(day::equals)) cnt++;
+                    break;
+                case "SUNDAY":
+                    if(Arrays.stream(dows).anyMatch(day::equals)) cnt++;
+                    break;
+            }
+            currDate = currDate.plusDays(1);
+            day = currDate.getDayOfWeek().toString();
+        }
+        this.totalCount = cnt;
+    }
+
+    public void updateStatus() {
+
     }
 
 }
