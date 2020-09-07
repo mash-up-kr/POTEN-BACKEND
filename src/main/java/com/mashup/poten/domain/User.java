@@ -1,18 +1,11 @@
 package com.mashup.poten.domain;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.mashup.poten.dto.HabitDTO;
-import com.mashup.poten.dto.UserDTO;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * User Domain 객체
@@ -35,9 +28,6 @@ public class User {
     @Column(unique = true)
     private String nickname;
 
-    @OneToMany(mappedBy = "user")
-    private List<Habit> habits = new ArrayList<>();
-
     @Builder
     public User(Integer userSeq, String snsType, String token, String nickname) {
         this.userSeq = userSeq;
@@ -50,14 +40,4 @@ public class User {
         this.token = token;
     }
 
-    public void setSortedForToday(UserDTO userDTO) {
-        LocalDate date = LocalDate.now();
-
-        List<Habit> todayhabits = habits.stream().filter(habit -> habit.getDoDay().contains(date.getDayOfWeek().toString())).sorted().collect(Collectors.toList());
-        List<Habit> notTodayhabits = habits.stream().filter(habit -> !habit.getDoDay().contains(date.getDayOfWeek().toString())).sorted().collect(Collectors.toList());
-
-        todayhabits.addAll(notTodayhabits);
-
-        userDTO.setSortedForTodayHabit(todayhabits.stream().map(HabitDTO::fromDomain).collect(Collectors.toList()));
-    }
 }

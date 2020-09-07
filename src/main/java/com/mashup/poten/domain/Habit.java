@@ -12,6 +12,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * habit Domain 객체
@@ -45,15 +46,20 @@ public class Habit implements Comparable<Habit> {
 
     private LocalDateTime createDate;
 
-    @JoinColumn(name = "userSeq")
+    private int characterCode;
+
+    @JoinColumn(name = "user_seq")
     @ManyToOne
     private User user;
 
-    @OneToMany(mappedBy = "habit")
-    private List<Diary> diarys = new ArrayList<>();
+    // @TODO 과일 코드
+
+    // @TODO currentCount : 현재날 제외 하고 count
+
+    // @TODO currentCount - doneCount >= life => state : FAIL
 
     @Builder
-    public Habit(Integer habitSeq, String title, int duration, String doDay, int totalCount, int doneCount, int life, State state, int alarmTime, LocalDateTime createDate, List<Diary> diarys) {
+    public Habit(Integer habitSeq, String title, int duration, String doDay, int totalCount, int doneCount, int life, State state, int alarmTime, LocalDateTime createDate, int characterCode) {
         this.habitSeq = habitSeq;
         this.title = title;
         this.duration = duration;
@@ -64,7 +70,7 @@ public class Habit implements Comparable<Habit> {
         this.state = state;
         this.alarmTime = alarmTime;
         this.createDate =createDate;
-        this.diarys = diarys;
+        this.characterCode = characterCode;
     }
 
 
@@ -127,6 +133,10 @@ public class Habit implements Comparable<Habit> {
     public void setLife() {
         int totalLife = (this.totalCount / 10) + 1;
         this.life = (totalLife > 5 ? 5 : totalLife);
+    }
+
+    public void setState() {
+        this.state = State.ING;
     }
 
 }

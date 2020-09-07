@@ -6,7 +6,9 @@ import com.mashup.poten.domain.Habit;
 import com.mashup.poten.domain.HabitRepository;
 import com.mashup.poten.domain.User;
 import com.mashup.poten.domain.UserRepository;
-import com.mashup.poten.dto.HabitDTO;
+import com.mashup.poten.dto.habit.request.AddHabitRequestDTO;
+import com.mashup.poten.dto.habit.response.AddHabitResponseDTO;
+import com.mashup.poten.dto.habit.response.HabitResponseDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -24,16 +26,18 @@ public class HabitService {
     private final UserRepository userRepository;
 
 
-    public HabitDTO addHabit(HttpServletRequest request, HabitDTO habitDTO) throws Exception{
+    public AddHabitResponseDTO addHabit(HttpServletRequest request, AddHabitRequestDTO addHabitRequestDTO) throws Exception{
         String token = request.getHeader(JwtProvider.HEADER_NAME);
-        habitDTO.removeDoDaySpace();
+        addHabitRequestDTO.removeDoDaySpace();
         User user = userRepository.findById(Integer.valueOf(jwtProvider.getUserSeq(token))).orElseThrow(() ->  new Exception(ResponseMessage.INVALID_TOKEN));
-        Habit habit = habitDTO.toDomain();
+        Habit habit = addHabitRequestDTO.toDomain();
         habit.setOwner(user);
+        habit.setState();
+        habit.setCreateDate();
         habit.setTotalCount();
         habit.setLife();
         habit = habitRepository.save(habit);
-        return HabitDTO.fromDomain(habit);
+        return new AddHabitResponseDTO(habit.getHabitSeq(), habit.getTitle(), habit.getDuration(), habit.getDoDay(), habit.getTotalCount(), habit.getDoneCount(), habit.getLife(), habit.getState(), habit.getAlarmTime(), habit.getCreateDate(), habit.getCharacterCode());
     }
 
     private Habit getHabitWitchCheckHabitOwner(String userSeq, Integer habitSeq) throws Exception{
@@ -45,7 +49,7 @@ public class HabitService {
         return habit;
     }
 
-    public List<HabitDTO> getHabits(HttpServletRequest request) throws Exception{
+    public List<HabitResponseDTO> getHabits(HttpServletRequest request) throws Exception{
         String token = request.getHeader(JwtProvider.HEADER_NAME);
         Integer userSeq = Integer.valueOf(jwtProvider.getUserSeq(token));
         User user = userRepository.findById(userSeq).orElseThrow(() ->  new Exception(ResponseMessage.INVALID_TOKEN));
@@ -56,12 +60,25 @@ public class HabitService {
         List<Habit> notTodayhabits = habits.stream().filter(habit -> !habit.getDoDay().contains(date.getDayOfWeek().toString())).sorted().collect(Collectors.toList());
 
         todayhabits.addAll(notTodayhabits);
+        doSortingForToday(habits);
 
-        return todayhabits.stream().map(HabitDTO::fromDomain).collect(Collectors.toList());
+
+        return todayhabits.stream().map(HabitResponseDTO::fromDomain).collect(Collectors.toList());
     }
 
-    public HabitDTO getHabit(HttpServletRequest request, Integer habitSeq) throws Exception{
+    private void doSortingForToday(List<Habit> habits) {
+        LocalDate date = LocalDate.now();
+
+        List<Habit> todayhabits = habits.stream().filter(habit -> habit.getDoDay().contains(date.getDayOfWeek().toString())).sorted().collect(Collectors.toList());
+        List<Habit> notTodayhabits = habits.stream().filter(habit -> !habit.getDoDay().contains(date.getDayOfWeek().toString())).sorted().collect(Collectors.toList());
+
+        todayhabits.addAll(notTodayhabits);
+
+        habits = todayhabits;
+    }
+
+    public HabitResponseDTO getHabit(HttpServletRequest request, Integer habitSeq) throws Exception{
         String token = request.getHeader(JwtProvider.HEADER_NAME);
-        return HabitDTO.fromDomain(getHabitWitchCheckHabitOwner(jwtProvider.getUserSeq(token), habitSeq));
+        return HabitResponseDTO.fromDomain(getHabitWitchCheckHabitOwner(jwtProvider.getUserSeq(token), habitSeq));
     }
 }
