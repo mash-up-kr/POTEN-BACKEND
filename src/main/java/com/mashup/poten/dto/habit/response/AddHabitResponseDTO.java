@@ -26,6 +26,8 @@ public class AddHabitResponseDTO {
 
     private int life;
 
+    private int currentLife;
+
     private State state;
 
     private int alarmTime;

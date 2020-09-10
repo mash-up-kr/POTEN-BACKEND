@@ -27,6 +27,8 @@ public class HabitResponseDTO {
 
     private int life;
 
+    private int currentLife;
+
     private State state;
 
     private int alarmTime;
@@ -36,6 +38,6 @@ public class HabitResponseDTO {
     private int characterCode;
 
     public static HabitResponseDTO fromDomain(Habit habit) {
-        return new HabitResponseDTO(habit.getHabitSeq(), habit.getTitle(), habit.getDuration(), habit.getDoDay(), habit.getTotalCount(), habit.getDoneCount(), habit.getLife(), habit.getState(), habit.getAlarmTime(), habit.getCreateDate(), habit.getCharacterCode());
+        return new HabitResponseDTO(habit.getHabitSeq(), habit.getTitle(), habit.getDuration(), habit.getDoDay(), habit.getTotalCount(), habit.getDoneCount(), habit.getLife(), habit.getCurrentLife(), habit.getState(), habit.getAlarmTime(), habit.getCreateDate(), habit.getCharacterCode());
     }
 }

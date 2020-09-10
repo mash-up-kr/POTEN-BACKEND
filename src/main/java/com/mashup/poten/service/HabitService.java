@@ -37,7 +37,7 @@ public class HabitService {
         habit.setTotalCount();
         habit.setLife();
         habit = habitRepository.save(habit);
-        return new AddHabitResponseDTO(habit.getHabitSeq(), habit.getTitle(), habit.getDuration(), habit.getDoDay(), habit.getTotalCount(), habit.getDoneCount(), habit.getLife(), habit.getState(), habit.getAlarmTime(), habit.getCreateDate(), habit.getCharacterCode());
+        return new AddHabitResponseDTO(habit.getHabitSeq(), habit.getTitle(), habit.getDuration(), habit.getDoDay(), habit.getTotalCount(), habit.getDoneCount(), habit.getLife(), habit.getCurrentLife(), habit.getState(), habit.getAlarmTime(), habit.getCreateDate(), habit.getCharacterCode());
     }
 
     private Habit getHabitWitchCheckHabitOwner(String userSeq, Integer habitSeq) throws Exception{

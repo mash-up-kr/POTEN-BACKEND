@@ -39,6 +39,8 @@ public class Habit implements Comparable<Habit> {
 
     private int life;
 
+    private int currentLife;
+
     @Enumerated(EnumType.STRING)
     private State state;
 
@@ -59,7 +61,7 @@ public class Habit implements Comparable<Habit> {
     // @TODO currentCount - doneCount >= life => state : FAIL
 
     @Builder
-    public Habit(Integer habitSeq, String title, int duration, String doDay, int totalCount, int doneCount, int life, State state, int alarmTime, LocalDateTime createDate, int characterCode) {
+    public Habit(Integer habitSeq, String title, int duration, String doDay, int totalCount, int doneCount, int life, int currentLife, State state, int alarmTime, LocalDateTime createDate, int characterCode) {
         this.habitSeq = habitSeq;
         this.title = title;
         this.duration = duration;
@@ -67,6 +69,7 @@ public class Habit implements Comparable<Habit> {
         this.totalCount = totalCount;
         this.doneCount = doneCount;
         this.life = life;
+        this.currentLife = currentLife;
         this.state = state;
         this.alarmTime = alarmTime;
         this.createDate =createDate;
@@ -133,6 +136,7 @@ public class Habit implements Comparable<Habit> {
     public void setLife() {
         int totalLife = (this.totalCount / 10) + 1;
         this.life = (totalLife > 5 ? 5 : totalLife);
+        this.currentLife = this.life;
     }
 
     public void setState() {
